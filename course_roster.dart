@@ -102,5 +102,23 @@ bonusSeats ??= 0;
 
 print('Bonus seats: $bonusSeats');
 
+// Part7
+for (var student in enrolledStudents) {
+  print(student);
+}
 
+attendanceCount.forEach((name, count) {
+  print('$name: $count');
+});
+
+List<String> announcements = [
+  'Welcome to $courseTitle',
+  if (!isOpen) 'Course is FULL — waitlist open',
+  for (var student in waitlist)
+    'Reminder: $student, please confirm attendance',
+];
+
+for (var announcement in announcements) {
+  print(announcement);
+}
 }
