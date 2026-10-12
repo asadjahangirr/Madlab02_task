@@ -32,11 +32,12 @@ final int shelfSize = 3 + u % 4; // items on the shelf in Steps 9-10
 
 // ===========================================================================
 //1.1
-class LibraryItem {
+ abstract class LibraryItem {
   final String title;
   final int year;
   LibraryItem(this.title, this.year);
   String describe() => '$title ($year)';
+  int lateFee(int days);
 }
 
 //1.2
@@ -51,6 +52,8 @@ class Book extends LibraryItem {
   // as descibe(), Dart treats it as a different method.
   // The inherited describe() would run instead, omitting pages.
   // Using @override helps detect this mistake.
+  @override
+  int lateFee(int days) => days * feePerDay;
 }
 Book mainBook(){
       return Book(titles[u], yearOf(u), 100 + 3 * seed);
@@ -61,7 +64,27 @@ class Magazine extends LibraryItem{
   Magazine(super.title, super.year,this.issue);
   @override 
     String describe() => '${super.describe()}, issue $issue';
+  @override
+  int lateFee(int days) => days * (feePerDay ~/ 2);
 }
+//3.2
+
+class Dvd extends LibraryItem {
+  final int minutes;
+
+  Dvd(super.title, super.year, this.minutes);
+
+  @override
+  String describe() => '${super.describe()}, $minutes min';
+
+  @override
+  int lateFee(int days) => days * feePerDay * 2;
+}
+Dvd mainDvd() {
+  int i = (u + 2) % 10;
+  return Dvd(titles[i], yearOf(i), 90 + seed % 40);
+}
+
 
 Magazine mainMagazine() {
   int i = (u + 1) % 10;
@@ -105,6 +128,19 @@ void step2() {
 
 void step3() {
   print('--- Step 3 ---');
+  //3.3
+  Book book = mainBook();
+  Magazine magazine = mainMagazine();
+  Dvd dvd = mainDvd();
+
+  print('Step 3: Book late fee for $daysLate days = ${book.lateFee(daysLate)}');
+  print('Step 3: Magazine late fee for $daysLate days = ${magazine.lateFee(daysLate)}');
+  print('Step 3: Dvd late fee for $daysLate days = ${dvd.lateFee(daysLate)}');
+
+  // Think: LibraryItem cannot be instantiated directly because
+  // it is an abstract class with an unimplemented lateFee()
+  // method. Only concrete subclasses implementing this method
+  // can be instantiated.
 }
 
 void step4() {
