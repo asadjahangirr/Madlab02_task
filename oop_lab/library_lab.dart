@@ -1,4 +1,5 @@
-// library_lab.dart  -  Campus Library System
+
+ // library_lab.dart  -  Campus Library System
 // Name: ASADJAHANGIRR   Roll no: 04072313036
 
 const String rollNo = '04072313036'; // e.g. '21F-0347'
@@ -41,8 +42,10 @@ final int shelfSize = 3 + u % 4; // items on the shelf in Steps 9-10
 }
 
 //1.2
-class Book extends LibraryItem {
+class Book extends LibraryItem implements Borrowable {
   final int pages;
+  bool _out = false;
+
   Book(super.title, super.year, this.pages);
   //2.2
   @override
@@ -54,7 +57,28 @@ class Book extends LibraryItem {
   // Using @override helps detect this mistake.
   @override
   int lateFee(int days) => days * feePerDay;
+
+  //4.2
+  @override
+  bool get isAvailable => !_out;
+
+  @override
+  void borrow() {
+    _out = true;
+  }
+
+  @override
+  void giveBack() {
+    _out = false;
+  }
 }
+//4.1
+abstract class Borrowable {
+  bool get isAvailable;
+  void borrow();
+  void giveBack();
+}
+
 Book mainBook(){
       return Book(titles[u], yearOf(u), 100 + 3 * seed);
 }
