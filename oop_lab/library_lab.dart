@@ -36,17 +36,38 @@ class LibraryItem {
   final String title;
   final int year;
   LibraryItem(this.title, this.year);
+  String describe() => '$title ($year)';
 }
 
 //1.2
 class Book extends LibraryItem {
   final int pages;
   Book(super.title, super.year, this.pages);
-  
+  //2.2
+  @override
+  String describe() =>
+'${super.describe()}, $pages pages';
+  // Think: If @override is omitted and describe is misspelled
+  // as descibe(), Dart treats it as a different method.
+  // The inherited describe() would run instead, omitting pages.
+  // Using @override helps detect this mistake.
 }
 Book mainBook(){
       return Book(titles[u], yearOf(u), 100 + 3 * seed);
 }
+//2.3
+class Magazine extends LibraryItem{
+  final int issue;
+  Magazine(super.title, super.year,this.issue);
+  @override 
+    String describe() => '${super.describe()}, issue $issue';
+}
+
+Magazine mainMagazine() {
+  int i = (u + 1) % 10;
+  return Magazine(titles[i], yearOf(i), 1 + (t + u) % 12);
+}
+
 void main() {
   print('Seed: $seed (t=$t, u=$u)');
   step1();
@@ -71,11 +92,15 @@ void step1() {
   //  Think: item.pages causes a compile error because item is
   //  declared as LibraryItem, which has no pages field.
   //  Dart checks member access using the declared variable type
+  //2.1
+  
   }
 
 
 void step2() {
   print('--- Step 2 ---');
+  print('Step 2: ${mainBook().describe()}');
+  print('Step 2: ${mainMagazine().describe()}');
 }
 
 void step3() {
