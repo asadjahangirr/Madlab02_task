@@ -1,4 +1,5 @@
-// main.dart - Study Tracker lab
+
+ // main.dart - Study Tracker lab
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -29,11 +30,10 @@ final List<String> lifecycleLog = <String>[];
 
 void main() => runApp(const LabApp());
 
- // Think Question - Step 1:
- // runApp() receives the root widget (LabApp) to start the app.
- // MaterialApp's home receives the widget (HomePage)
- // that displays the main screen of the application.
-
+// Think Question - Step 1:
+// runApp() receives the root widget (LabApp) to start the app.
+// MaterialApp's home receives the widget (HomePage)
+// that displays the main screen of the application.
 
 // Keep the name LabApp and its const constructor: the checker uses them.
 
@@ -48,7 +48,11 @@ class LabApp extends StatelessWidget {
     );
   }
 }
+
 //creating home
+
+
+ //creating home
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -59,8 +63,47 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text('Study Tracker: $course'),
       ),
-      body: const Center(
-        child: Text('Hello'),
+
+      //2.3
+      body: StudentCard(
+        name: studentName,
+        roll: rollNo,
+        course: course,
+      ),
+    );
+  }
+}
+
+
+//2
+
+class StudentCard extends StatelessWidget {
+  final String name;
+  final String roll;
+  final String course;
+
+  const StudentCard({
+    super.key,
+    required this.name,
+    required this.roll,
+    required this.course,
+  });
+
+  //2.2
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: $name', key: const Key('student-name')),
+            Text('Roll no: $roll', key: const Key('student-roll')),
+            Text('Course: $course', key: const Key('student-course')),
+          ],
+        ),
       ),
     );
   }
