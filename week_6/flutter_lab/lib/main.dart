@@ -77,6 +77,12 @@ class HomePage extends StatelessWidget {
 
 //2
 
+// Think Question - Step 2:
+// StatelessWidget fields are final because widgets are immutable.
+// final prevents the fields from being reassigned after initialization.
+// If final is removed, Dart reports an error because
+// a StatelessWidget must have only final instance fields
+
 class StudentCard extends StatelessWidget {
   final String name;
   final String roll;
@@ -88,6 +94,10 @@ class StudentCard extends StatelessWidget {
     required this.roll,
     required this.course,
   });
+
+ //2
+
+
 
   //2.2
 
