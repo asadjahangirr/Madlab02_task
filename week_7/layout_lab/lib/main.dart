@@ -116,8 +116,10 @@ class HomePage extends StatelessWidget {
           children: [
             const SettingsCard(),
             const SizedBox(height: 12),
-            // Add each new widget BELOW the previous one, in the order the
-            // steps tell you, with a SizedBox(height: 12) between widgets.
+
+            // Steps 1-2: Clock
+            const Clock(),
+            const SizedBox(height: 12),
           ],
         ),
       ),
@@ -168,6 +170,71 @@ class SummaryRow extends StatelessWidget {
         Text(
           'Part C: break the layout on purpose, then fix it with Expanded or Wrap.',
           key: const Key('sum-c'),
+        ),
+      ],
+    );
+  }
+}
+
+// ===== Steps 1-2: Clock and Lifecycle =====
+
+class Clock extends StatefulWidget {
+  const Clock({super.key});
+
+  @override
+  State<Clock> createState() => _ClockState();
+}
+
+class _ClockState extends State<Clock> {
+  late Timer _timer;
+  int _seconds = startSec;
+  int _builds = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    lifecycleLog.add('initState');
+
+    // A Timer belongs in initState because it should start only once.
+    // Starting a Timer inside build would create extra timers whenever
+    // the widget rebuilds, making the clock run faster.
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() => _seconds += tick);
+
+      if (_seconds >= stopAt) {
+        timer.cancel();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    lifecycleLog.add('dispose');
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _builds++;
+
+    // Builds increases once per second because setState triggers one
+    // rebuild for each timer tick, updating both Text widgets together.
+    //
+    // Without _timer.cancel() in dispose, the timer could call setState
+    // after the widget was removed, causing "setState() called after dispose()".
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Session: $_seconds s',
+          key: const Key('clock'),
+        ),
+        Text(
+          'Builds: $_builds',
+          key: const Key('builds'),
         ),
       ],
     );
